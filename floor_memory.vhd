@@ -2,34 +2,18 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
--- Module: Floor Memory
--- Requirement Coverage:
--- GR-4: Track current floor and pending requests until served.
--- GR-5.a: Soft Reset (Clears requests, preserves floor).
--- GR-5.b: Hard Reset (Clears requests, resets floor to 0).
--- TR-3: Request Latching (Latched until arrival).
--- TR-7: Boundaries (Prevent illegal floor indices).
-
 entity floor_memory is
     generic (
         N_FLOORS : integer := 4  -- GR-2: Support >= 4 floors
     );
     port (
         clk           : in std_logic;
-        
-        -- Reset Inputs (GR-5)
-        hard_reset    : in std_logic; -- Resets EVERYTHING (Power-on default)
-        soft_reset    : in std_logic; -- Resets requests only (Maintenance mode)
-        
-        -- Control Signals from FSM/Scheduler
-        floor_inc     : in std_logic; -- Signal to increment floor count (Move Up)
-        floor_dec     : in std_logic; -- Signal to decrement floor count (Move Down)
-        req_served    : in std_logic; -- Signal that current floor request is done (Door Open)
-        
-        -- External Request Inputs (Buttons)
+        hard_reset    : in std_logic; 
+        soft_reset    : in std_logic; 
+        floor_inc     : in std_logic; 
+        floor_dec     : in std_logic; 
+        req_served    : in std_logic; 
         request_btns  : in std_logic_vector(N_FLOORS-1 downto 0);
-        
-        -- Outputs to Scheduler and Display
         current_floor : out integer range 0 to N_FLOORS-1;
         pending_reqs  : out std_logic_vector(N_FLOORS-1 downto 0)
     );
@@ -43,12 +27,7 @@ architecture Behavioral of floor_memory is
 
 begin
 
-    -- ========================================================================
-    -- PROCESS 1: CURRENT FLOOR TRACKING
-    -- Implements GR-4 (Track Floor) and TR-7 (Boundaries)
-    -- Implements GR-5.b (Hard Reset affects floor)
-    -- Implements GR-5.a (Soft Reset does NOT affect floor)
-    -- ========================================================================
+		-- current floor tracking
     p_floor_counter : process(clk, hard_reset)
     begin
         if hard_reset = '1' then
@@ -70,12 +49,8 @@ begin
             end if;
         end if;
     end process;
-
-    -- ========================================================================
-    -- PROCESS 2: REQUEST LATCHING
-    -- Implements GR-4 (Track Pending Requests) and TR-3 (Latching)
-    -- Implements GR-5.a & GR-5.b (Both resets clear requests)
-    -- ========================================================================
+		
+		-- request latching
     p_request_latch : process(clk, hard_reset, soft_reset)
     begin
         -- Asynchronous Hard Reset (Safety)
