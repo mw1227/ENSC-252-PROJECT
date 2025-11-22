@@ -3,23 +3,37 @@ use ieee.std_logic_1164.all;
 
 entity display_driver is
     port (
-        floor_in : in  integer range 0 to 3;
-        hex_out  : out std_logic_vector(6 downto 0)
+        floor_in  : in  integer range 0 to 7;  -- 8 floors
+        door_open : in  std_logic;            -- door state
+        hex_floor : out std_logic_vector(6 downto 0); -- for hex0
+        hex_door  : out std_logic_vector(6 downto 0) -- for hex1
     );
 end display_driver;
 
 architecture Behavioral of display_driver is
 begin
-    -- Standard Active-Low 7-Segment Encoding
-    -- 0 is mapped to display "1", 1 to "2", etc.
     process(floor_in)
     begin
         case floor_in is
-            when 0 => hex_out <= "1111001"; -- Display '1'
-            when 1 => hex_out <= "0100100"; -- Display '2'
-            when 2 => hex_out <= "0110000"; -- Display '3'
-            when 3 => hex_out <= "0011001"; -- Display '4'
-            when others => hex_out <= "0111111"; -- Dash '-'
+            when 0 => hex_floor <= "1111001"; -- '1'
+            when 1 => hex_floor <= "0100100"; -- '2'
+            when 2 => hex_floor <= "0110000"; -- '3'
+            when 3 => hex_floor <= "0011001"; -- '4'
+            when 4 => hex_floor <= "0010010"; -- '5'
+            when 5 => hex_floor <= "0000010"; -- '6'
+            when 6 => hex_floor <= "1111000"; -- '7'
+            when 7 => hex_floor <= "0000000"; -- '8'
+            when others => hex_floor <= "0111111"; -- '-'
         end case;
     end process;
+
+    process(door_open)
+    begin
+        if door_open = '1' then
+            hex_door <= "1000000"; -- 'O'
+        else
+            hex_door <= "0110001"; -- 'C'
+        end if;
+    end process;
+
 end Behavioral;
