@@ -32,23 +32,47 @@ begin
         if any_req = '1' then
             if pending_reqs(current_floor) = '1' then
                 req_served <= '1';
-            elsif dir = DIR_UP and current_floor < N_FLOORS - 1 then
-                floor_inc <= '1';
-            elsif dir = DIR_DOWN and current_floor > 0 then
-                floor_dec <= '1';
+            else
+                if dir = DIR_UP and current_floor < N_FLOORS - 1 then
+                    floor_inc <= '1';
+                elsif dir = DIR_DOWN and current_floor > 0 then
+                    floor_dec <= '1';
+                end if;
             end if;
         end if;
     end process;
 
     process(clk, reset)
+        variable min_distance   : integer;
+        variable nearest_floor  : integer;
     begin
         if reset = '1' then
             dir <= DIR_UP;
-        elsif rising_edge(clk) and any_req = '1' then
-            if dir = DIR_UP and current_floor = N_FLOORS - 1 and pending_reqs(current_floor) = '0' then
-                dir <= DIR_DOWN;
-            elsif dir = DIR_DOWN and current_floor = 0 and pending_reqs(current_floor) = '0' then
-                dir <= DIR_UP;
+        elsif rising_edge(clk) then
+            if any_req = '1' then
+                if dir = DIR_UP and current_floor = N_FLOORS - 1 and pending_reqs(current_floor) = '0' then
+                    dir <= DIR_DOWN;
+                elsif dir = DIR_DOWN and current_floor = 0 and pending_reqs(current_floor) = '0' then
+                    dir <= DIR_UP;
+                elsif pending_reqs(current_floor) = '0' and
+                      floor_inc = '0' and floor_dec = '0' then
+                    min_distance  := N_FLOORS;
+                    nearest_floor := current_floor;
+                    for i in 0 to N_FLOORS-1 loop
+                        if pending_reqs(i) = '1' then
+                            if abs(current_floor - i) < min_distance then
+                                min_distance := abs(current_floor - i);
+                                nearest_floor := i;
+                            end if;
+                        end if;
+                    end loop;
+
+                    if nearest_floor > current_floor then
+                        dir <= DIR_UP;
+                    elsif nearest_floor < current_floor then
+                        dir <= DIR_DOWN;
+                    end if;
+                end if;
             end if;
         end if;
     end process;
