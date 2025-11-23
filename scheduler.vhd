@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity scheduler is
-    generic ( N_FLOORS : integer := 4 );
+    generic ( N_FLOORS : integer := 8 );
     port (
         clk           : in  std_logic;
         reset         : in  std_logic;

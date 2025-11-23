@@ -9,7 +9,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity floor_manager is
     generic (
-        N_FLOORS : integer := 4  -- Number of floors (GR-2)
+        N_FLOORS : integer := 8  -- Number of floors (GR-2)
     );
     port (
         clk           : in std_logic;
