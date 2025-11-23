@@ -16,65 +16,100 @@ entity scheduler is
 end scheduler;
 
 architecture Behavioral of scheduler is
-    type dir_t is (DIR_UP, DIR_DOWN);
-    signal dir     : dir_t := DIR_UP;
+
+    type state_t is (IDLE, MOVING_UP, MOVING_DOWN, SERVING);
+    signal state, next_state : state_t;
     signal any_req : std_logic;
+
 begin
 
     any_req <= '1' when pending_reqs /= (others => '0') else '0';
 
-    process(current_floor, pending_reqs, dir, any_req)
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state <= IDLE;
+        elsif rising_edge(clk) then
+            state <= next_state;
+        end if;
+    end process;
+
+    process(state, pending_reqs, current_floor, any_req)
+        variable min_distance  : integer;
+        variable nearest_floor : integer;
+    begin
+        next_state <= state;
+
+        case state is
+            when IDLE =>
+                if any_req = '1' then
+                    if pending_reqs(current_floor) = '1' then
+                        next_state <= SERVING;
+                    else
+                        min_distance  := N_FLOORS;
+                        nearest_floor := current_floor;
+                        for i in 0 to N_FLOORS-1 loop
+                            if pending_reqs(i) = '1' then
+                                if abs(current_floor - i) < min_distance then
+                                    min_distance := abs(current_floor - i);
+                                    nearest_floor := i;
+                                end if;
+                            end if;
+                        end loop;
+
+                        if nearest_floor > current_floor then
+                            next_state <= MOVING_UP;
+                        elsif nearest_floor < current_floor then
+                            next_state <= MOVING_DOWN;
+                        end if;
+                    end if;
+                end if;
+
+            when MOVING_UP =>
+                if pending_reqs(current_floor) = '1' then
+                    next_state <= SERVING;
+                elsif current_floor = N_FLOORS - 1 then
+                    next_state <= MOVING_DOWN;
+                end if;
+
+            when MOVING_DOWN =>
+                if pending_reqs(current_floor) = '1' then
+                    next_state <= SERVING;
+                elsif current_floor = 0 then
+                    next_state <= MOVING_UP;
+                end if;
+
+            when SERVING =>
+                if any_req = '0' then
+                    next_state <= IDLE;
+                elsif pending_reqs(current_floor) = '0' then
+                    if current_floor < N_FLOORS-1 and pending_reqs(current_floor+1) = '1' then
+                        next_state <= MOVING_UP;
+                    elsif current_floor > 0 and pending_reqs(current_floor-1) = '1' then
+                        next_state <= MOVING_DOWN;
+                    else
+                        next_state <= IDLE;
+                    end if;
+                end if;
+        end case;
+    end process;
+
+    process(state)
     begin
         floor_inc  <= '0';
         floor_dec  <= '0';
         req_served <= '0';
 
-        if any_req = '1' then
-            if pending_reqs(current_floor) = '1' then
+        case state is
+            when IDLE =>
+                null;
+            when MOVING_UP =>
+                floor_inc <= '1';
+            when MOVING_DOWN =>
+                floor_dec <= '1';
+            when SERVING =>
                 req_served <= '1';
-            else
-                if dir = DIR_UP and current_floor < N_FLOORS - 1 then
-                    floor_inc <= '1';
-                elsif dir = DIR_DOWN and current_floor > 0 then
-                    floor_dec <= '1';
-                end if;
-            end if;
-        end if;
-    end process;
-
-    process(clk, reset)
-        variable min_distance   : integer;
-        variable nearest_floor  : integer;
-    begin
-        if reset = '1' then
-            dir <= DIR_UP;
-        elsif rising_edge(clk) then
-            if any_req = '1' then
-                if dir = DIR_UP and current_floor = N_FLOORS - 1 and pending_reqs(current_floor) = '0' then
-                    dir <= DIR_DOWN;
-                elsif dir = DIR_DOWN and current_floor = 0 and pending_reqs(current_floor) = '0' then
-                    dir <= DIR_UP;
-                elsif pending_reqs(current_floor) = '0' and
-                      floor_inc = '0' and floor_dec = '0' then
-                    min_distance  := N_FLOORS;
-                    nearest_floor := current_floor;
-                    for i in 0 to N_FLOORS-1 loop
-                        if pending_reqs(i) = '1' then
-                            if abs(current_floor - i) < min_distance then
-                                min_distance := abs(current_floor - i);
-                                nearest_floor := i;
-                            end if;
-                        end if;
-                    end loop;
-
-                    if nearest_floor > current_floor then
-                        dir <= DIR_UP;
-                    elsif nearest_floor < current_floor then
-                        dir <= DIR_DOWN;
-                    end if;
-                end if;
-            end if;
-        end if;
+        end case;
     end process;
 
 end Behavioral;
