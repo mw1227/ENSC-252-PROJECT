@@ -1,51 +1,129 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-entity display_driver is
+entity display_driver_fsm is
     port (
-        floor_in  : in  integer range 0 to 7;  			-- 8 floors
-        door_open : in  std_logic;           			-- door state
-		  estop		: in	std_logic;							-- estop
-        hex_floor : out std_logic_vector(6 downto 0); -- for hex0
-        hex_door  : out std_logic_vector(6 downto 0); -- for hex1
-		  estop_led : out std_logic							-- estop LED
+        clk       : in  std_logic;
+        reset     : in  std_logic;
+        floor_in  : in  integer range 0 to 7;
+        estop     : in  std_logic;
+        state     : in  integer range 0 to 6;
+        hex_floor : out std_logic_vector(6 downto 0);
+        hex_door  : out std_logic_vector(6 downto 0);
+        estop_led : out std_logic
     );
-end display_driver;
+end entity;
 
-architecture Behavioral of display_driver is
+architecture Behavioral of display_driver_fsm is
+
+    type state_t is (IDLE, MOVING_UP, MOVING_DOWN, SERVING, ESTOP, DOOR_OPEN, DOOR_CLOSE);
+
 begin
-    process(floor_in, estop)
+
+    process(state, floor_in)
     begin
-		if estop = '1' then
-			hex_floor <= "0111111"; --dash
-		else
-        case floor_in is
-            when 0 => hex_floor <= "1111001"; -- '1'
-            when 1 => hex_floor <= "0100100"; -- '2'
-            when 2 => hex_floor <= "0110000"; -- '3'
-            when 3 => hex_floor <= "0011001"; -- '4'
-            when 4 => hex_floor <= "0010010"; -- '5'
-            when 5 => hex_floor <= "0000010"; -- '6'
-            when 6 => hex_floor <= "1111000"; -- '7'
-            when 7 => hex_floor <= "0000000"; -- '8'
-            when others => hex_floor <= "0111111"; -- '-'
+        hex_floor <= "0111111";
+        hex_door  <= "0111111";
+        estop_led <= '0';
+
+        case state is
+            when IDLE =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "0110001";
+
+            when MOVING_UP =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "0110001";
+
+            when MOVING_DOWN =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "0110001";
+
+            when SERVING =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "1000000";
+
+            when DOOR_OPEN =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "1000000";
+
+            when DOOR_CLOSE =>
+                estop_led <= '0';
+                case floor_in is
+                    when 0 => hex_floor <= "1111001";
+                    when 1 => hex_floor <= "0100100";
+                    when 2 => hex_floor <= "0110000";
+                    when 3 => hex_floor <= "0011001";
+                    when 4 => hex_floor <= "0010010";
+                    when 5 => hex_floor <= "0000010";
+                    when 6 => hex_floor <= "1111000";
+                    when 7 => hex_floor <= "0000000";
+                    when others => hex_floor <= "0111111";
+                end case;
+                hex_door <= "0110001";
+
+            when ESTOP =>
+                estop_led <= '1';
+                hex_floor <= "0111111";
+                hex_door <= "0111111";
+
         end case;
-		end if;
     end process;
 
-    process(door_open, estop)
-    begin
-		if estop = '1' then
-			hex_door <= "0111111"; --dash
-		else
-        if door_open = '1' then
-            hex_door <= "1000000"; -- 'O'
-        else
-            hex_door <= "0110001"; -- 'C'
-        end if;
-		end if;
-    end process;
-	 
-	 estop_led <= not estop; --Led turns on when estop = 1
-
-end Behavioral;
+end architecture;
