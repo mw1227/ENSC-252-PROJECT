@@ -25,7 +25,7 @@ architecture Behavioral of scheduler is
 
 begin
 
-    any_req <= '1' when pending_reqs /= (others => '0') else '0';
+    any_req <= '1' when pending_reqs /= "00000000" else '0';
 
     process(clk, reset)
     begin

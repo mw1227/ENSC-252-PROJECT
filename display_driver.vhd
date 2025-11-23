@@ -43,23 +43,23 @@ begin
         estop_led <= '0';
 
         case floor_in is
-            when 0 => hex_floor <= "1000000";
-            when 1 => hex_floor <= "1111001";
-            when 2 => hex_floor <= "0100100";
-            when 3 => hex_floor <= "0110000";
-            when 4 => hex_floor <= "0011001";
-            when 5 => hex_floor <= "0010010";
-            when 6 => hex_floor <= "0000010";
-            when 7 => hex_floor <= "1111000";
+            when 0 => hex_floor <= "1111001";
+            when 1 => hex_floor <= "0100100";
+            when 2 => hex_floor <= "0110000";
+            when 3 => hex_floor <= "0011001";
+            when 4 => hex_floor <= "0010010";
+            when 5 => hex_floor <= "0000010";
+            when 6 => hex_floor <= "1111000";
+            when 7 => hex_floor <= "0000000";
             when others => hex_floor <= "1111111";
         end case;
 
         case s_state is
             when IDLE | MOVING_UP | MOVING_DOWN | DOOR_CLOSE =>
-                hex_door <= "0000001";
+                hex_door <= "1000110";
 
             when SERVING | DOOR_OPEN =>
-                hex_door <= "1000110";
+                hex_door <= "1000000";
 
             when ESTOP =>
                 estop_led <= '1';
