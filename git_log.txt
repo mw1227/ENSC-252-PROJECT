@@ -1,0 +1,343 @@
+Commit: afc70a1639cec0311d0c40869020a18df53ac325
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 23:10:06 2025 -0800
+
+Message: fixed states for display driver
+
+Files changed:
+M	display_driver.vhd
+
+Commit: d6746692ea4366d9cdf703101b0dea5f7fd3722d
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 22:39:19 2025 -0800
+
+Message: fixed floor integer
+
+Files changed:
+M	floor_manager.vhd
+M	scheduler.vhd
+
+Commit: f007165cf90fa4f05ee53fc097fb2ec08889753a
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 22:32:27 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: 1f431e64592b65270e0ff89b798a3cd5da7a95e5
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sat Nov 22 22:24:47 2025 -0800
+
+Message: combined floor_mem and floor_logic
+
+Files changed:
+A	floor_manager.vhd
+
+Commit: 48565d2d149144e7f5de0c32429bbe488b5ff4d2
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 19:47:03 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: 369847bcbc6fc206b81787ebfc3e0f47d7ada0f2
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sat Nov 22 18:43:39 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: a144d505f127f28fb31130907a7b0016248c3df6
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sat Nov 22 18:43:22 2025 -0800
+
+Message: fixing merge in display driver
+
+Files changed:
+Commit: 89ae15b2379d5a8f1d6e3ebd1684e6d02f38988a
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 18:40:28 2025 -0800
+
+Message: added or logic to state cases as it was redundent to state each one
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 2c3eb96067f9b107631421b4bc5eaee5d18cf7a7
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sat Nov 22 18:34:30 2025 -0800
+
+Message: Added logic for elevator direction and estop LED signals
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 858b1ee792d44f48d33d82ccde3f531a5793296b
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 18:30:30 2025 -0800
+
+Message: removed readme file
+
+Files changed:
+D	README.md
+
+Commit: 15ed34987b44b1c3c2e4de4da066d9b106da7404
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 18:27:41 2025 -0800
+
+Message: changed display driver to be state driven
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 8ed9b37b9c71691fb1f0fe3c32c8d7fe384142c2
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 18:25:58 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: ea886c7269ad64f622759eee67fc388c5c2c11f3
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 18:25:31 2025 -0800
+
+Message: changed logic to be state driven (IDLE, MOVING_UP, MOVING_DOWN, SERVING). More functional as I dont need to combine combinational logic with some sequential logic
+
+Files changed:
+M	scheduler.vhd
+
+Commit: 380cd453da3189126ba2d1af41fb76c155601d3f
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sat Nov 22 18:24:21 2025 -0800
+
+Message: removed the internal boundary checks since the FSM ensures we don't move out of bounds
+
+Files changed:
+M	floor_memory.vhd
+
+Commit: 569294e3658ea1651fdf7666bc1173d91393ca5e
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 17:11:51 2025 -0800
+
+Message: added logic to change direction to nearest floor when idle (no direction, pending current floor) by looping through requested floors and finding min distance to current floor to determine direction
+
+Files changed:
+M	scheduler.vhd
+
+Commit: 2e17808771e9be9cae232e18c025afdb6e3c5878
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 15:53:28 2025 -0800
+
+Message: added combinational logic for deciding direction (checks current direction to decide floor increment/decrement and fills request if current floor is the nearest requested floor) and logic to flip direction of elevator when reached top or bottom floor
+
+Files changed:
+M	scheduler.vhd
+
+Commit: 7153a0c7d80d8dc767ac726c53620939812ab2bd
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 15:25:53 2025 -0800
+
+Message: added estop to display
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 72dcada9355090e436e6e203d376a70f25f757f6
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 15:10:23 2025 -0800
+
+Message: added estop
+
+Files changed:
+M	floor_memory.vhd
+
+Commit: 8890849c54273432f2c1e8f9303c9ec2d9588cec
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 14:57:50 2025 -0800
+
+Message: added floor status and door status to hex0 and hex1
+
+Files changed:
+Commit: 2559986f96d4aa227b2cb777f51a79ec00554853
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 14:56:02 2025 -0800
+
+Message: added floor status and door status to hex0 and hex1
+
+Files changed:
+M	floor_memory.vhd
+A	scheduler.vhd
+
+Commit: 985b4266abc6871492a1fb051a47387bdc0678a8
+Author: darren <darrenzhao130@gmail.com>
+Date: Sat Nov 22 14:53:33 2025 -0800
+
+Message: added floor status and door status for hex0 and hex1
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 8dfc749fab845f3b01aff605d62c99935e821014
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 14:53:26 2025 -0800
+
+Message: fixed asynchronous hard reset
+
+Files changed:
+M	floor_memory.vhd
+
+Commit: 758fc9f9c2865ad990576de9131da3583ab3a0fd
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 14:34:42 2025 -0800
+
+Message: set up scheduling entity, decides what floors.vhd does based on floor_memory.vhd
+
+Files changed:
+A	scheduler.vhd
+
+Commit: 0dfe8c952334e7b4a8b34349d1a2c3ce497a81c8
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 14:03:27 2025 -0800
+
+Message: removing test files
+
+Files changed:
+D	test.txt
+
+Commit: 5e8bf68f3b5994ff6a9b0a5815ba5770101a62fa
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 13:58:48 2025 -0800
+
+Message: removing test files
+
+Files changed:
+D	testing2.txt
+
+Commit: 29bbd85e414368de85f09e2893a8bdf266952618
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:36:05 2025 -0800
+
+Message: Adyen
+
+Files changed:
+A	floor_memory.vhd
+
+Commit: 0de86384d222ca9b6a04c7668ca030878b9185eb
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:26:38 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: 70f74595acb7fe5fb14297bcbbb7452822625c58
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:24:35 2025 -0800
+
+Message: Ayden
+
+Files changed:
+A	display_driver.vhd
+
+Commit: cd26ac78128bd600aa7df36a9f8dd77ed593ec94
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:22:56 2025 -0800
+
+Message: Delete display_driver.vhd
+
+Files changed:
+D	display_driver.vhd
+
+Commit: 3512f76119ad0d31a6a54aa3f616e6232bb3b57f
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:20:48 2025 -0800
+
+Message: Ayden
+
+Files changed:
+A	display_driver.vhd
+
+Commit: 0e63020f93442ab55f28fddc4cf708ac9ebc2191
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 17:16:23 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functi:qa a as :qa : :qa :a :qa :aa
+
+Files changed:
+Commit: f56b69c1ed848ad52dadc5ae9ae895559c8d86b5
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 17:15:42 2025 -0800
+
+Message: Adding basic 50MHz to 1Hz clock pre-scaler
+
+Files changed:
+A	preScaler.vhd
+
+Commit: fce03e4c6e511daadae395059e9223fa812ade16
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:08:35 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: f3fc11d3b40731b415071fe7ebec60a75a199640
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Fri Nov 21 17:07:42 2025 -0800
+
+Message: Comment
+
+Files changed:
+A	testing2.txt
+
+Commit: 953f9bf3c3505233f9150d8a824054647f00b6e2
+Author: darren <darrenzhao130@gmail.com>
+Date: Fri Nov 21 17:05:49 2025 -0800
+
+Message: test update
+
+Files changed:
+M	test.txt
+
+Commit: 1443ab3a4a7a4d6465ff8633c7ba05061c0188c8
+Author: darren <darrenzhao130@gmail.com>
+Date: Fri Nov 21 17:01:03 2025 -0800
+
+Message: added 3 bit counter for floors
+
+Files changed:
+A	floors.vhd
+
+Commit: 7dbd1bc01073e68003d3daf7b85651cacdce8fca
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 16:54:38 2025 -0800
+
+Message: test file
+
+Files changed:
+A	test.txt
+
+Commit: 09decf0d23a0ed4df5a0b97e73c32d00edaab75b
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 16:49:49 2025 -0800
+
+Message: removed corrupt file
+
+Files changed:
+D	preScaler.vhdl
+
+Commit: af5af2af02fbe8312e479cb3ff3dc777aa55c693
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 16:48:32 2025 -0800
+
+Message: first commit
+
+Files changed:
+A	preScaler.vhdl
+
+Commit: 3ab5c748761127a8041e6516abcc273818b99252
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Fri Nov 21 10:54:22 2025 -0800
+
+Message: first commit
+
+Files changed:
+A	README.md

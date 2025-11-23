@@ -11,9 +11,11 @@ entity scheduler is
         pending_reqs  : in  std_logic_vector(N_FLOORS-1 downto 0);
         floor_inc     : out std_logic;
         floor_dec     : out std_logic;
-        req_served    : out std_logic
+        req_served    : out std_logic;
+        state_out     : out integer range 0 to 6  
     );
 end scheduler;
+
 
 architecture Behavioral of scheduler is
 
@@ -99,16 +101,20 @@ begin
         floor_inc  <= '0';
         floor_dec  <= '0';
         req_served <= '0';
+        state_out  <= 0;
 
         case state is
             when IDLE =>
-                null;
+                state_out <= 0;
             when MOVING_UP =>
                 floor_inc <= '1';
+                state_out <= 1;
             when MOVING_DOWN =>
                 floor_dec <= '1';
+                state_out <= 2;
             when SERVING =>
                 req_served <= '1';
+                state_out <= 3;
         end case;
     end process;
 
