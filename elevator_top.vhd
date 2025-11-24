@@ -1,82 +1,86 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 
 entity elevator_top is
-    port(
-        clk       : in  std_logic;
-        sw        : in  std_logic_vector(7 downto 0);
-        key       : in  std_logic_vector(3 downto 0);
-        hex0      : out std_logic_vector(6 downto 0);
-        hex1      : out std_logic_vector(6 downto 0);
-        led_estop : out std_logic
+    Port (
+        CLOCK_50 : in  STD_LOGIC;
+        SW       : in  STD_LOGIC_VECTOR(7 downto 0);
+        KEY      : in  STD_LOGIC_VECTOR(3 downto 0);
+        HEX0     : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX1     : out STD_LOGIC_VECTOR(6 downto 0);
+        LEDR     : out STD_LOGIC_VECTOR(9 downto 0)
     );
 end elevator_top;
 
-architecture Behavioral of elevator_top is
+architecture Structural of elevator_top is
 
-    signal hard_reset    : std_logic;
-    signal soft_reset    : std_logic;
-    signal estop         : std_logic;
-
-    signal clk_1hz       : std_logic;
-    signal current_floor : integer range 0 to 7;
-    signal pending_reqs  : std_logic_vector(7 downto 0);
-    signal floor_inc     : std_logic;
-    signal floor_dec     : std_logic;
-    signal req_served    : std_logic;
-    signal scheduler_state : integer range 0 to 6;
+    signal tick_1hz      : std_logic;
+    signal wire_floor    : std_logic_vector(2 downto 0);
+    signal wire_state    : std_logic_vector(2 downto 0);
+    
+    component clk_div
+        Port ( clk_50 : in STD_LOGIC; reset_n : in STD_LOGIC; tick_1hz : out STD_LOGIC );
+    end component;
+    
+    component controller_fsm
+        Generic ( FLOORS, TRAVEL_TIME, ARRIVAL_WAIT_TIME, DOOR_OPEN_TIME : integer );
+        Port (
+            clk, tick : in STD_LOGIC;
+            rst_hard_n, rst_soft_n, estop_n : in STD_LOGIC;
+            req_sw : in STD_LOGIC_VECTOR(7 downto 0);
+            floor_count : out STD_LOGIC_VECTOR(2 downto 0);
+            state_code  : out STD_LOGIC_VECTOR(2 downto 0)
+        );
+    end component;
+    
+    component display_driver
+        Port (
+            floor_in   : in  STD_LOGIC_VECTOR(2 downto 0);
+            state_in   : in  STD_LOGIC_VECTOR(2 downto 0);
+            led_dir    : out STD_LOGIC_VECTOR(2 downto 0);
+            led_estop  : out STD_LOGIC;
+            hex_floor  : out STD_LOGIC_VECTOR(6 downto 0);
+            hex_door   : out STD_LOGIC_VECTOR(6 downto 0)
+        );
+    end component;
 
 begin
 
-    hard_reset <= not key(3);
-    soft_reset <= not key(2);
-    estop      <= not key(1);
+    U_CLK : clk_div
+    port map (
+        clk_50   => CLOCK_50,
+        reset_n  => KEY(2),
+        tick_1hz => tick_1hz
+    );
 
-    prescaler_inst : entity work.preScaler
-        port map (
-            clk_in  => clk,
-            reset   => hard_reset,
-            clk_out => clk_1hz
-        );
+    U_CTRL : controller_fsm
+    generic map (
+        FLOORS => 8,
+        TRAVEL_TIME => 2,
+        ARRIVAL_WAIT_TIME => 2,
+        DOOR_OPEN_TIME => 2
+    )
+    port map (
+        clk         => CLOCK_50,
+        tick        => tick_1hz,
+        rst_hard_n  => KEY(2),
+        rst_soft_n  => KEY(1),
+        estop_n     => KEY(3),
+        req_sw      => SW(7 downto 0),
+        floor_count => wire_floor,
+        state_code  => wire_state
+    );
+    
+    U_DISP : display_driver
+    port map (
+        floor_in   => wire_floor,
+        state_in   => wire_state,
+        led_dir    => LEDR(2 downto 0),
+        led_estop  => LEDR(9),
+        hex_floor  => HEX0,
+        hex_door   => HEX1
+    );
 
-    floor_manager_inst : entity work.floor_manager
-        generic map (N_FLOORS => 8)
-        port map (
-            clk           => clk_1hz,
-            hard_reset    => hard_reset,
-            soft_reset    => soft_reset,
-            estop         => estop,
-            floor_inc     => floor_inc,
-            floor_dec     => floor_dec,
-            req_served    => req_served,
-            request_btns  => sw,
-            current_floor => current_floor,
-            pending_reqs  => pending_reqs
-        );
+    LEDR(8 downto 3) <= (others => '0');
 
-    scheduler_inst : entity work.scheduler
-        generic map (N_FLOORS => 8)
-        port map (
-            clk           => clk_1hz,
-            reset         => hard_reset,
-            current_floor => current_floor,
-            pending_reqs  => pending_reqs,
-            floor_inc     => floor_inc,
-            floor_dec     => floor_dec,
-            req_served    => req_served,
-            state_out     => scheduler_state
-        );
-
-    display_driver_inst : entity work.display_driver
-        port map (
-            clk       => clk_1hz,
-            reset     => hard_reset,
-            floor_in  => current_floor,
-            state     => scheduler_state,
-            hex_floor => hex0,
-            hex_door  => hex1,
-            estop_led => led_estop
-        );
-
-end Behavioral;
+end Structural;
