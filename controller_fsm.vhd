@@ -178,12 +178,8 @@ begin
     begin
         if rst_hard_n = '0' then
             current_floor_reg <= 0;
-            timer_count <= 0;
-            direction <= "00";
-            req_latched <= (others => '0');
-            sw_sampled <= (others => '0');
-            sw_prev <= (others => '0');
-            debounce_cnt <= 0;
+                req_latched <= (others => '0');
+                sw_prev <= sw_sampled;
         elsif rising_edge(clk) then
             
             if debounce_cnt < 500000 then 
