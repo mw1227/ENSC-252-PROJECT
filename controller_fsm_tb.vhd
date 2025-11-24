@@ -9,12 +9,8 @@ architecture sim of controller_fsm_tb is
 
     constant FLOORS : integer := 8;
     
-    -- 1. TIMING CONSTANTS
-    -- Must be larger than the FSM's internal 500,000 cycle debounce (10ms)
     constant BUTTON_HOLD_TIME : time := 10 ms;
     
-    -- Frequency of the movement tick (how fast the elevator physically moves)
-    -- 100 us is fast enough for simulation, but slow enough to see.
     constant TICK_PERIOD : time := 100 us; 
 
     signal clk         : std_logic := '0';
@@ -28,28 +24,23 @@ architecture sim of controller_fsm_tb is
 
 begin
 
-    -- 2. CLOCK GENERATION (50 MHz)
     clk <= not clk after 10 ns; 
 
-    -- 3. TICK GENERATION (THE FIX)
-    -- This generates a pulse that is '1' for exactly ONE clock cycle
-    -- every TICK_PERIOD. This prevents the FSM from rushing through states.
     tick_gen : process
     begin
         wait for TICK_PERIOD;
-        wait until rising_edge(clk); -- Sync with clock
+        wait until rising_edge(clk);
         tick <= '1';
-        wait until rising_edge(clk); -- Hold for 1 cycle
+        wait until rising_edge(clk);
         tick <= '0';
     end process;
 
-    -- 4. DUT INSTANTIATION
     dut : entity work.controller_fsm
         generic map(
             FLOORS => FLOORS,
-            TRAVEL_TIME => 2,       -- 2 Ticks to move one floor
-            ARRIVAL_WAIT_TIME => 2, -- 2 Ticks to wait at arrival
-            DOOR_OPEN_TIME => 2     -- 2 Ticks to keep door open
+            TRAVEL_TIME => 2,       
+            ARRIVAL_WAIT_TIME => 2, 
+            DOOR_OPEN_TIME => 2     
         )
         port map(
             clk => clk,
@@ -62,7 +53,6 @@ begin
             state_code => state_code
         );
 
-    -- 5. STIMULUS PROCESS
         stim : process
     begin
 
