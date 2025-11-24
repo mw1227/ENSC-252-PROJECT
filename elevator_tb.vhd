@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity elevator_tb is
-end elevator_tb;
+entity controller_fsm_tb is
+end controller_fsm_tb;
 
-architecture sim of elevator_tb is
+architecture sim of controller_fsm_tb is
 
     constant FLOORS : integer := 8;
     
