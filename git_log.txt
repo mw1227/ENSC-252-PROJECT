@@ -1,3 +1,152 @@
+Commit: a84fe17991c0901bd5118e547c2987542009dc37
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 23:24:45 2025 -0800
+
+Message: added testbench for fsm, explained in documentation
+
+Files changed:
+A	elevator_tb.vhd
+
+Commit: 1edc2ac3c14ef2cc2091689fb3b5a4ca190e426e
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 23:18:55 2025 -0800
+
+Message: changed name to clk_div as specified in the assignment pdf
+
+Files changed:
+A	clk_div.vhd
+
+Commit: 9206f449db8193b2482c4386f63c147c22977c93
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 22:39:38 2025 -0800
+
+Message: rewired components to newly combined fsm, fixed wiring for ledrs for emergency stop and direction indicator (idle/up/down)
+
+Files changed:
+M	elevator_top.vhd
+
+Commit: ef2bf70f461a79b08d4a531002422a129fb1fe55
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 22:37:05 2025 -0800
+
+Message: combined vhd, added support for debouncing (switches unlatch after requested floor has been served), added clock counter delays for door timing and elevator motion timing
+
+Files changed:
+A	controller_fsm.vhd
+
+Commit: 7fa9a6d43b84b6363473f774d463873497bd4d91
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 22:35:07 2025 -0800
+
+Message: spent the day combining two logics into one fsm so the entire systems runs on a single moore fsm machine
+
+Files changed:
+D	floor_manager.vhd
+D	scheduler.vhd
+
+Commit: 67660360666d66d261c6ba736273abe328dc5263
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 22:32:34 2025 -0800
+
+Message: rewrote display_driver, now recieves states, led signals and hex signals
+
+Files changed:
+M	display_driver.vhd
+
+Commit: 3daf65b134c69775da190e883eddc8335dcf9a47
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:44:40 2025 -0800
+
+Message: Merge branch 'functions' of https://github.com/mw1227/ENSC-252-PROJECT into functions
+
+Files changed:
+Commit: a9b7f5d15118239b625f5d3d6b31ad4ec1d751b1
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:43:24 2025 -0800
+
+Message: fixed bugged line
+
+Files changed:
+Commit: 4d8442780c1cf288edbd9de565a8b5b245f9ded6
+Author: darren <darrenzhao130@gmail.com>
+Date: Sun Nov 23 00:42:22 2025 -0800
+
+Message: made top level entity mapping switches, keys, and hex
+
+Files changed:
+A	elevator_top.vhd
+
+Commit: 87b1b39be0f0929935a5434fafe8ff7b4b5e494d
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:40:12 2025 -0800
+
+Message: WIP on functions: d50c149 Fixed several bugs
+
+Files changed:
+Commit: ab58f7154c1d1e7f791cc53d01c778bdcf0c6415
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:40:12 2025 -0800
+
+Message: index on functions: d50c149 Fixed several bugs
+
+Files changed:
+Commit: d50c149866aafabac66c51730fcb851cc27cdd8b
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:28:42 2025 -0800
+
+Message: Fixed several bugs
+
+Files changed:
+M	display_driver.vhd
+M	scheduler.vhd
+
+Commit: d13c9ea4d030964b18214533817029ceed0d7d1c
+Author: aydenl49 <aydenlee.314@gmail.com>
+Date: Sun Nov 23 00:12:21 2025 -0800
+
+Message: Adding time delay between floors, updated directional logic ie. up until no more up, down until no more down
+
+Files changed:
+M	scheduler.vhd
+
+Commit: 5feee2507bdea6c4d95982fbdfbbfee2c924ede9
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sun Nov 23 00:00:14 2025 -0800
+
+Message: reimplemented door and movement delay, elevator movement has 2 second delay per floor, door open has 2 second delay
+
+Files changed:
+M	floor_manager.vhd
+
+Commit: e101da47ca8d3a824a70eb9a85eac2b2907c5205
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 23:51:54 2025 -0800
+
+Message: removed unnessesary files floors and floor_memory, combined into floor_manager
+
+Files changed:
+D	floor_memory.vhd
+D	floors.vhd
+
+Commit: f2b5ba3ec153c56d62c88ecda24c46f2b56942ba
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 23:33:43 2025 -0800
+
+Message: changed floor manager to properly accept floor_incr and floor_dcr from scheduler
+
+Files changed:
+M	floor_manager.vhd
+
+Commit: aeaef54ddd73820c587e48eedc31a530dc144c92
+Author: mw1227 <matthewlhwong@gmail.com>
+Date: Sat Nov 22 23:32:23 2025 -0800
+
+Message: fixed scheduler not passing state to display driver, vhdl cannot pass the state itself and an integer state has to be passed instead
+
+Files changed:
+A	git_log.txt
+M	scheduler.vhd
+
 Commit: afc70a1639cec0311d0c40869020a18df53ac325
 Author: darren <darrenzhao130@gmail.com>
 Date: Sat Nov 22 23:10:06 2025 -0800
